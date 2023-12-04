@@ -47,6 +47,10 @@ void rbmap::balance(rbmap::Node *node) {
             if(node->parent_left && parent->parent_left) {
                 parent->parent = grand_parent->parent;
                 grand_parent->left = parent->right;
+                if(grand_parent->left != nullptr) {
+                    grand_parent->left->parent = grand_parent;
+                    grand_parent->left->parent_left = true;
+                }
                 parent->right = grand_parent;
                 grand_parent->parent = parent;
                 parent->parent_left = grand_parent->parent_left;
@@ -69,6 +73,10 @@ void rbmap::balance(rbmap::Node *node) {
                 node->parent_left = true;
                 parent->parent = node;
                 parent->right = node->left;
+                if(parent->right != nullptr) {
+                    parent->right->parent = parent;
+                    parent->right->parent_left = false;
+                }
                 node->left = parent;
                 grand_parent->left = node;
 
@@ -76,6 +84,10 @@ void rbmap::balance(rbmap::Node *node) {
 
                 parent->parent = grand_parent->parent;
                 grand_parent->left = parent->right;
+                if(grand_parent->left != nullptr) {
+                    grand_parent->left->parent = grand_parent;
+                    grand_parent->left->parent_left = true;
+                }
                 parent->right = grand_parent;
                 grand_parent->parent = parent;
                 parent->parent_left = grand_parent->parent_left;
@@ -99,6 +111,10 @@ void rbmap::balance(rbmap::Node *node) {
                 grand_parent->parent = parent;
                 grand_parent->parent_left = true;
                 grand_parent->right = parent->left;
+                if(grand_parent->right != nullptr) {
+                    grand_parent->right->parent = grand_parent;
+                    grand_parent->right->parent_left = false;
+                }
                 parent->left = grand_parent;
                 if(parent->parent != nullptr) {
                     if (parent->parent_left)
@@ -118,6 +134,10 @@ void rbmap::balance(rbmap::Node *node) {
                 node->parent_left = false;
                 parent->parent = node;
                 parent->left = node->right;
+                if(parent->left != nullptr) {
+                    parent->left->parent = parent;
+                    parent->left->parent_left = true;
+                }
                 node->right = parent;
                 grand_parent->right = node;
 
@@ -128,6 +148,10 @@ void rbmap::balance(rbmap::Node *node) {
                 grand_parent->parent = parent;
                 grand_parent->parent_left = true;
                 grand_parent->right = parent->left;
+                if(grand_parent->right != nullptr) {
+                    grand_parent->right->parent = grand_parent;
+                    grand_parent->right->parent_left = false;
+                }
                 parent->left = grand_parent;
                 if(parent->parent != nullptr) {
                     if (parent->parent_left)
