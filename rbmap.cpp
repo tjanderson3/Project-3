@@ -51,17 +51,26 @@ void rbmap::balance(rbmap::Node *node) {
                 grand_parent->parent = parent;
                 parent->parent_left = grand_parent->parent_left;
                 grand_parent->parent_left = false;
+                if(parent->parent != nullptr) {
+                    if (parent->parent_left)
+                        parent->parent->left = parent;
+                    else
+                        parent->parent->right = parent;
+                } else {
+                    head = parent;
+                }
 
                 parent->red = !parent->red;
                 grand_parent->red = !grand_parent->red;
             }
 
-            if(!node->parent_left && parent->parent_left) {
+            else if(!node->parent_left && parent->parent_left) {
                 node->parent = grand_parent;
                 node->parent_left = true;
                 parent->parent = node;
                 parent->right = node->left;
                 node->left = parent;
+                grand_parent->left = node;
 
                 parent = node;
 
@@ -71,29 +80,46 @@ void rbmap::balance(rbmap::Node *node) {
                 grand_parent->parent = parent;
                 parent->parent_left = grand_parent->parent_left;
                 grand_parent->parent_left = false;
+                if(parent->parent != nullptr) {
+                    if (parent->parent_left)
+                        parent->parent->left = parent;
+                    else
+                        parent->parent->right = parent;
+                } else {
+                    head = parent;
+                }
 
                 parent->red = !parent->red;
                 grand_parent->red = !grand_parent->red;
             }
 
-            if(!node->parent_left && !parent->parent_left) {
+            else if(!node->parent_left && !parent->parent_left) {
                 parent->parent = grand_parent->parent;
                 parent->parent_left = grand_parent->parent_left;
                 grand_parent->parent = parent;
                 grand_parent->parent_left = true;
                 grand_parent->right = parent->left;
                 parent->left = grand_parent;
+                if(parent->parent != nullptr) {
+                    if (parent->parent_left)
+                        parent->parent->left = parent;
+                    else
+                        parent->parent->right = parent;
+                } else {
+                    head = parent;
+                }
 
                 grand_parent->red = !grand_parent->red;
                 parent->red = !parent->red;
             }
 
-            if(node->parent_left && !parent->parent_left) {
+            else if(node->parent_left && !parent->parent_left) {
                 node->parent = grand_parent;
                 node->parent_left = false;
                 parent->parent = node;
                 parent->left = node->right;
                 node->right = parent;
+                grand_parent->right = node;
 
                 parent = node;
 
@@ -103,6 +129,14 @@ void rbmap::balance(rbmap::Node *node) {
                 grand_parent->parent_left = true;
                 grand_parent->right = parent->left;
                 parent->left = grand_parent;
+                if(parent->parent != nullptr) {
+                    if (parent->parent_left)
+                        parent->parent->left = parent;
+                    else
+                        parent->parent->right = parent;
+                } else {
+                    head = parent;
+                }
 
                 grand_parent->red = !grand_parent->red;
                 parent->red = !parent->red;
@@ -115,7 +149,7 @@ rbmap::rbmap() {
     head = nullptr;
 }
 
-void rbmap::insert(std::string& new_key, std::string& new_value) {
+void rbmap::insert(std::string new_key, std::string new_value) {
     if(head == nullptr) {
         head = new Node(head, false, new_key, new_value);
         head->red = false;
@@ -151,4 +185,34 @@ void rbmap::insert(std::string& new_key, std::string& new_value) {
 
         balance(current_node);
     }
+}
+
+std::string rbmap::find(std::string key) {
+    if(head == nullptr) {
+        return "Key not found";
+    }
+
+    Node* node = head;
+    while(true) {
+        if(key == node->key)
+            return node->value;
+
+        else if(key < node->key) {
+            if(node->left == nullptr)
+                return "Key not found";
+            else
+                node = node->left;
+        }
+
+        else {
+            if(node->right == nullptr)
+                return "Key not found";
+            else
+                node = node->right;
+        }
+    }
+}
+
+std::string rbmap::operator[](std::string key) {
+    return find(key);
 }

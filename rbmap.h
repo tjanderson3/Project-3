@@ -6,6 +6,7 @@
 #define PROJECT3_RBMAP_H
 
 #include <string>
+#include <utility>
 
 
 class rbmap {
@@ -30,7 +31,10 @@ class rbmap {
 public:
 
     rbmap();
-    void insert(std::string& new_key, std::string& new_value);
+    void insert(std::string new_key, std::string new_value);
+    std::string find(std::string key);
+
+    std::string operator[](std::string key);
 };
 
 
