@@ -29,6 +29,10 @@ int main() {
     dataFile.close();
     hashmap h;
     rbmap rb;
+    for(int i = 0; i < isbns.size(); i++){
+        h.insert(isbns[i], books[i]);
+        rb.insert(isbns[i], books[i]);
+    }
 
     cout << "Comparing the performance of Hashmaps and Red-Black Trees" << endl << endl;
     while(option != 5) {
@@ -37,23 +41,31 @@ int main() {
         cin >> option;
         if (option == 1) {
             string insertions;
+            double loadFactor;
+            int size;
             cout << "Enter the number of books to insert:" << endl;
             cin >> insertions;
             if (insertions.length() >= 1 && all_of(insertions.begin(), insertions.end(), ::isdigit)) {
+                cout << "Enter the desired load factor for the hash table(# between 0 and 1):" << endl;
+                cin >> loadFactor;
+                cout << "Enter the desired initial size for the hash table(# greater than or equal to 1):" << endl;
+                cin >> size;
+                rbmap rb1;
+                hashmap h1(size, loadFactor);
                 auto start = chrono::high_resolution_clock::now();
                 for(int i = 0; i < stoi(insertions); i++){
-                    rb.insert(isbns[i], books[i]);
+                    rb1.insert(isbns[i], books[i]);
                 }
                 auto end = chrono::high_resolution_clock::now();
                 chrono::duration<double, milli> duration = end - start;
                 cout << "Red-Black Tree Performance time(in ms): " << duration.count() << endl;
                 auto start1 = chrono::high_resolution_clock::now();
                 for(int i = 0; i < stoi(insertions); i++){
-                    h.insert(isbns[i], books[i]);
+                    h1.insert(isbns[i], books[i]);
                 }
                 auto end1 = chrono::high_resolution_clock::now();
                 chrono::duration<double, milli> duration1 = end1 - start1;
-                cout << "Hashmap Performance time(in ms): " << duration1.count() << endl;
+                cout << "Hashmap Performance time with load factor " << loadFactor << " and initial size " << size << "(in ms): " << duration1.count() << endl;
             }
             else {
                 cout << "Invalid input. Please enter a valid number." << endl;
@@ -91,12 +103,12 @@ int main() {
                 cout << "Enter the book title:" << endl;
                 cin >> title;
                 auto start = chrono::high_resolution_clock::now();
-                //insert into r-b tree/hashmap here
+                rb.insert(uISBN, title);
                 auto end = chrono::high_resolution_clock::now();
                 chrono::duration<double, milli> duration = end - start;
                 cout << "Red-Black Tree Performance time(in ms): " << duration.count() << endl;
                 auto start1 = chrono::high_resolution_clock::now();
-                //insert into r-b tree/hashmap here
+                h.insert(uISBN, title);
                 auto end1 = chrono::high_resolution_clock::now();
                 chrono::duration<double, milli> duration1 = end1 - start1;
                 cout << "Hashmap Performance time(in ms): " << duration1.count() << endl;
@@ -108,12 +120,12 @@ int main() {
             cin >> uISBN;
             if(uISBN.length() == 10 && all_of(uISBN.begin(), uISBN.end(), ::isdigit)) {
                 auto start = chrono::high_resolution_clock::now();
-                //insert through r-b tree/hashmap here
+                cout << "Book Title: " << rb.find(uISBN) << endl;
                 auto end = chrono::high_resolution_clock::now();
                 chrono::duration<double, milli> duration = end - start;
                 cout << "Red-Black Tree Performance time(in ms): " << duration.count() << endl;
                 auto start1 = chrono::high_resolution_clock::now();
-                //search through r-b tree/hashmap here
+                cout << "Book Title: " << h.search(uISBN) << endl;
                 auto end1 = chrono::high_resolution_clock::now();
                 chrono::duration<double, milli> duration1 = end1 - start1;
                 cout << "Hashmap Performance time(in ms): " << duration1.count() << endl;
