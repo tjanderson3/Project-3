@@ -14,7 +14,9 @@ class rbmap {
         std::string key;
         std::string value;
 
+        // Color boolean, black = false
         bool red;
+        // Whether or not node is the left child of its parent, right = false
         bool parent_left;
         Node* left;
         Node* right;

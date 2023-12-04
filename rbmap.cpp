@@ -4,6 +4,7 @@
 
 #include "rbmap.h"
 
+// Constructor without key value pair
 rbmap::Node::Node(rbmap::Node *parent_node, bool direction_left) {
     red = true;
     left = nullptr;
@@ -12,6 +13,7 @@ rbmap::Node::Node(rbmap::Node *parent_node, bool direction_left) {
     parent_left = direction_left;
 }
 
+// Constructor with key value pair
 rbmap::Node::Node(rbmap::Node *parent_node, bool direction_left, std::string& new_key, std::string& new_value) {
     red = true;
     left = nullptr;
@@ -23,6 +25,7 @@ rbmap::Node::Node(rbmap::Node *parent_node, bool direction_left, std::string& ne
     value = new_value;
 }
 
+// Checks if node and nodes above it need balancing, and balances as necessary.
 void rbmap::balance(rbmap::Node *node) {
     if(node->parent == nullptr) {
         node->red = false;
@@ -38,13 +41,16 @@ void rbmap::balance(rbmap::Node *node) {
             cousin = grand_parent->left;
 
         if(cousin != nullptr && cousin->red) {
+            // Color Change
             parent->red = false;
             cousin->red = false;
             grand_parent->red = true;
             balance(grand_parent);
 
         } else {
+            // Rotations
             if(node->parent_left && parent->parent_left) {
+                // LL Rotation case
                 parent->parent = grand_parent->parent;
                 grand_parent->left = parent->right;
                 if(grand_parent->left != nullptr) {
@@ -69,6 +75,7 @@ void rbmap::balance(rbmap::Node *node) {
             }
 
             else if(!node->parent_left && parent->parent_left) {
+                // LR Rotation case
                 node->parent = grand_parent;
                 node->parent_left = true;
                 parent->parent = node;
@@ -106,6 +113,7 @@ void rbmap::balance(rbmap::Node *node) {
             }
 
             else if(!node->parent_left && !parent->parent_left) {
+                // RR Rotation case
                 parent->parent = grand_parent->parent;
                 parent->parent_left = grand_parent->parent_left;
                 grand_parent->parent = parent;
@@ -130,6 +138,7 @@ void rbmap::balance(rbmap::Node *node) {
             }
 
             else if(node->parent_left && !parent->parent_left) {
+                //RL Rotation case
                 node->parent = grand_parent;
                 node->parent_left = false;
                 parent->parent = node;
@@ -169,10 +178,12 @@ void rbmap::balance(rbmap::Node *node) {
     }
 }
 
+// "Best" constructor
 rbmap::rbmap() {
     head = nullptr;
 }
 
+// Insert entry into map
 void rbmap::insert(std::string new_key, std::string new_value) {
     if(head == nullptr) {
         head = new Node(head, false, new_key, new_value);
@@ -211,6 +222,7 @@ void rbmap::insert(std::string new_key, std::string new_value) {
     }
 }
 
+// Standard BST search
 std::string rbmap::find(std::string key) {
     if(head == nullptr) {
         return "Key not found";
