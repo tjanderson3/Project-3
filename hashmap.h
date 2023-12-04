@@ -63,7 +63,9 @@ void hashmap::resize()
     for (const auto& node : table) {
         if (!node.first.empty()) {
             unsigned int index = hashFunction(node.first, newSize);
-            index = findNextEmptySlot(index);
+            while (!newTable[index].first.empty()) {
+                index = (index + 1) % newTable.size();
+            }
             newTable[index].first = node.first;
             newTable[index].second = node.second;
         }
